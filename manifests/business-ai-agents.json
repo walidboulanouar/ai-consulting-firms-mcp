@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.walidboulanouar/business-ai-agents",
+  "title": "Business AI Agents",
+  "description": "Compare business agent platforms by workflow, permission model and trial criteria.",
+  "version": "1.1.0",
+  "repository": {
+    "url": "https://github.com/walidboulanouar/ai-consulting-firms-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://topaiagentsforbusiness.com/#agent-access",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://topaiagentsforbusiness.com/mcp"
+    }
+  ]
+}

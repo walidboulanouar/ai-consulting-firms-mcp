@@ -2,9 +2,21 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
 
-import manifest from "./server.json";
+import guide0 from "./server.json";
+import guide1 from "./manifests/ai-consulting-companies.json";
+import guide2 from "./manifests/ai-consulting-services.json";
+import guide3 from "./manifests/ai-automation-agencies.json";
+import guide4 from "./manifests/business-ai-agents.json";
+import guide5 from "./manifests/secure-ai-for-business.json";
 
-const hosts = new Set(["topaiconsultingservices.com", "topaiagentsforbusiness.com", "bestsecureaiforbusiness.com", "theaiconsultingfirms.com", "theaiconsultingcompanies.com", "topaiautomationagencies.com"]);
+const manifests = {
+  "theaiconsultingfirms.com": guide0,
+  "theaiconsultingcompanies.com": guide1,
+  "topaiconsultingservices.com": guide2,
+  "topaiautomationagencies.com": guide3,
+  "topaiagentsforbusiness.com": guide4,
+  "bestsecureaiforbusiness.com": guide5
+};
 const annotation = {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false};
 const result = value => ({content: [{type: "text", text: JSON.stringify(value, null, 2)}]});
 
@@ -19,8 +31,8 @@ async function catalog(site) {
   return data;
 }
 
-function createServer(site) {
-  const server = new McpServer({name: "ai-consulting-firms", version: "1.0.0"}, {
+function createServer(site, manifest) {
+  const server = new McpServer({name: manifest.name, version: manifest.version}, {
     instructions: "Compare published directory entries by scope. Cite their provider sources. Display order does not indicate quality."
   });
   server.registerTool("search_firms", {
@@ -62,9 +74,10 @@ function createServer(site) {
 export default {
   async fetch(request) {
     const {hostname, origin: site, pathname: path} = new URL(request.url);
-    if (!hosts.has(hostname)) return new Response("Unknown guide", {status: 404});
+    const manifest = Object.hasOwn(manifests, hostname) ? manifests[hostname] : null;
+    if (!manifest) return new Response("Unknown guide", {status: 404});
     if (path === "/.well-known/mcp.json" && (request.method === "GET" || request.method === "HEAD")) {
-      return new Response(request.method === "HEAD" ? null : JSON.stringify({...manifest, websiteUrl: site + "/#agent-access", remotes: [{type:"streamable-http", url:site + "/mcp"}]}), {
+      return new Response(request.method === "HEAD" ? null : JSON.stringify(manifest), {
         headers: {"Content-Type": "application/json", "Cache-Control": "public, max-age=300"}
       });
     }
@@ -72,7 +85,7 @@ export default {
     const origin = request.headers.get("Origin");
     if (origin && origin !== site) return new Response("Origin is not permitted", {status: 403});
     if (request.method !== "POST") return new Response(null, {status: 405, headers: {Allow: "POST"}});
-    const server = createServer(site);
+    const server = createServer(site, manifest);
     const transport = new WebStandardStreamableHTTPServerTransport({sessionIdGenerator: undefined, enableJsonResponse: true});
     await server.connect(transport);
     try {

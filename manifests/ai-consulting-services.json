@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.walidboulanouar/ai-consulting-services",
+  "title": "AI Consulting Services",
+  "description": "Find AI consulting services by project deliverable and published evidence.",
+  "version": "1.1.0",
+  "repository": {
+    "url": "https://github.com/walidboulanouar/ai-consulting-firms-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://topaiconsultingservices.com/#agent-access",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://topaiconsultingservices.com/mcp"
+    }
+  ]
+}

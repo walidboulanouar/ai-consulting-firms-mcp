@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.walidboulanouar/secure-ai-for-business",
+  "title": "Secure AI for Business",
+  "description": "Compare model screening, AI gateway and governance tools using primary sources.",
+  "version": "1.1.0",
+  "repository": {
+    "url": "https://github.com/walidboulanouar/ai-consulting-firms-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://bestsecureaiforbusiness.com/#agent-access",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://bestsecureaiforbusiness.com/mcp"
+    }
+  ]
+}

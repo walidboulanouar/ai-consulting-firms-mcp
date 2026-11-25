@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.walidboulanouar/ai-automation-agencies",
+  "title": "AI Automation Agencies",
+  "description": "Shortlist automation agencies by workflow and source-linked case studies.",
+  "version": "1.1.0",
+  "repository": {
+    "url": "https://github.com/walidboulanouar/ai-consulting-firms-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://topaiautomationagencies.com/#agent-access",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://topaiautomationagencies.com/mcp"
+    }
+  ]
+}
