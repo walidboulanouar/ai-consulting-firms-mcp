@@ -9,12 +9,52 @@
   "preview_urls": false,
   "routes": [
     {
+      "pattern": "topaiconsultingservices.com/mcp",
+      "zone_name": "topaiconsultingservices.com"
+    },
+    {
+      "pattern": "topaiconsultingservices.com/.well-known/mcp.json",
+      "zone_name": "topaiconsultingservices.com"
+    },
+    {
+      "pattern": "topaiagentsforbusiness.com/mcp",
+      "zone_name": "topaiagentsforbusiness.com"
+    },
+    {
+      "pattern": "topaiagentsforbusiness.com/.well-known/mcp.json",
+      "zone_name": "topaiagentsforbusiness.com"
+    },
+    {
+      "pattern": "bestsecureaiforbusiness.com/mcp",
+      "zone_name": "bestsecureaiforbusiness.com"
+    },
+    {
+      "pattern": "bestsecureaiforbusiness.com/.well-known/mcp.json",
+      "zone_name": "bestsecureaiforbusiness.com"
+    },
+    {
       "pattern": "theaiconsultingfirms.com/mcp",
       "zone_name": "theaiconsultingfirms.com"
     },
     {
       "pattern": "theaiconsultingfirms.com/.well-known/mcp.json",
       "zone_name": "theaiconsultingfirms.com"
+    },
+    {
+      "pattern": "theaiconsultingcompanies.com/mcp",
+      "zone_name": "theaiconsultingcompanies.com"
+    },
+    {
+      "pattern": "theaiconsultingcompanies.com/.well-known/mcp.json",
+      "zone_name": "theaiconsultingcompanies.com"
+    },
+    {
+      "pattern": "topaiautomationagencies.com/mcp",
+      "zone_name": "topaiautomationagencies.com"
+    },
+    {
+      "pattern": "topaiautomationagencies.com/.well-known/mcp.json",
+      "zone_name": "topaiautomationagencies.com"
     }
   ]
 }
