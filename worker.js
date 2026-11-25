@@ -2,6 +2,8 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
 
+import manifest from "./server.json";
+
 const site = "https://theaiconsultingfirms.com";
 const annotation = {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false};
 const result = value => ({content: [{type: "text", text: JSON.stringify(value, null, 2)}]});
@@ -48,7 +50,13 @@ function createServer() {
 
 export default {
   async fetch(request) {
-    if (new URL(request.url).pathname !== "/mcp") return new Response("Unknown path", {status: 404});
+    const path = new URL(request.url).pathname;
+    if (path === "/.well-known/mcp.json" && (request.method === "GET" || request.method === "HEAD")) {
+      return new Response(request.method === "HEAD" ? null : JSON.stringify(manifest), {
+        headers: {"Content-Type": "application/json", "Cache-Control": "public, max-age=300"}
+      });
+    }
+    if (path !== "/mcp") return new Response("Unknown path", {status: 404});
     const origin = request.headers.get("Origin");
     if (origin && origin !== site) return new Response("Origin is not permitted", {status: 403});
     if (request.method !== "POST") return new Response(null, {status: 405, headers: {Allow: "POST"}});

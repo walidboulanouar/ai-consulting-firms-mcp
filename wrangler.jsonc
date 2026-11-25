@@ -2,10 +2,19 @@
   "name": "ai-consulting-firms-mcp",
   "main": "worker.js",
   "compatibility_date": "2026-11-01",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "workers_dev": false,
   "preview_urls": false,
   "routes": [
-    { "pattern": "theaiconsultingfirms.com/mcp", "zone_name": "theaiconsultingfirms.com" }
+    {
+      "pattern": "theaiconsultingfirms.com/mcp",
+      "zone_name": "theaiconsultingfirms.com"
+    },
+    {
+      "pattern": "theaiconsultingfirms.com/.well-known/mcp.json",
+      "zone_name": "theaiconsultingfirms.com"
+    }
   ]
 }
