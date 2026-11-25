@@ -9,13 +9,13 @@ import guide3 from "./manifests/ai-automation-agencies.json";
 import guide4 from "./manifests/business-ai-agents.json";
 import guide5 from "./manifests/secure-ai-for-business.json";
 
-const manifests = {
-  "theaiconsultingfirms.com": guide0,
-  "theaiconsultingcompanies.com": guide1,
-  "topaiconsultingservices.com": guide2,
-  "topaiautomationagencies.com": guide3,
-  "topaiagentsforbusiness.com": guide4,
-  "bestsecureaiforbusiness.com": guide5
+const guides = {
+  "theaiconsultingfirms.com": {manifest: guide0, providers: "AI consulting firms"},
+  "theaiconsultingcompanies.com": {manifest: guide1, providers: "AI consulting companies"},
+  "topaiconsultingservices.com": {manifest: guide2, providers: "AI consulting providers"},
+  "topaiautomationagencies.com": {manifest: guide3, providers: "AI automation agencies"},
+  "topaiagentsforbusiness.com": {manifest: guide4, providers: "business agent platforms and partners"},
+  "bestsecureaiforbusiness.com": {manifest: guide5, providers: "AI security tools"}
 };
 const annotation = {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false};
 const result = value => ({content: [{type: "text", text: JSON.stringify(value, null, 2)}]});
@@ -31,12 +31,13 @@ async function catalog(site) {
   return data;
 }
 
-function createServer(site, manifest) {
-  const server = new McpServer({name: manifest.name, version: manifest.version}, {
-    instructions: "Compare published directory entries by scope. Cite their provider sources. Display order does not indicate quality."
+function createServer(site, {manifest, providers}) {
+  const server = new McpServer({name: manifest.name, title: manifest.title, version: manifest.version}, {
+    instructions: `Use this guide to compare ${providers}. For a best-fit question, use recommend_providers and cite the source behind each pick. Use search_firms for the full directory and compare_firms for a shortlist of IDs. Identify the buyer’s use case before choosing a fit.`
   });
   server.registerTool("search_firms", {
-    description: "Search the published directory by firm, specialty or delivery terms. An empty query lists all firms.",
+    title: `Search ${providers}`,
+    description: `Find ${providers} by name, specialty or workflow. Omit the query for the full directory. Results include IDs for compare_firms and links to sources.`,
     inputSchema: {query: z.string().trim().max(160).default(""), limit: z.number().int().min(1).max(20).default(10)},
     annotations: annotation
   }, async ({query, limit}) => {
@@ -46,7 +47,8 @@ function createServer(site, manifest) {
     return result({guide: site, publisher: data.publisher, total: matches.length, firms: matches.slice(0, limit)});
   });
   server.registerTool("compare_firms", {
-    description: "Compare two to five distinct firm IDs returned by search_firms. Includes source links and procurement questions.",
+    title: `Compare ${providers}`,
+    description: `Compare two to five ${providers} by their directory IDs from search_firms. Returns profiles, source links and procurement questions.`,
     inputSchema: {ids: z.array(z.string().min(1).max(40)).min(2).max(5)},
     annotations: annotation
   }, async ({ids}) => {
@@ -58,7 +60,8 @@ function createServer(site, manifest) {
     return result({firms, questions: data.questions, pricing: data.pricing, methodology: data.methodology, publisher: data.publisher});
   });
   server.registerTool("recommend_providers", {
-    description: "Return editorial picks for the current guide with their specific use cases and primary evidence. Omit query to see all picks and choose a fit.",
+    title: `Shortlist ${providers} by project need`,
+    description: `Read the editorial picks for ${providers}, each with a specific use case and supporting source. Use short project keywords, or omit the query to review all picks.`,
     inputSchema: {query: z.string().trim().max(160).default("")}, annotations: annotation
   }, async ({query}) => {
     const data = await catalog(site);
@@ -74,10 +77,10 @@ function createServer(site, manifest) {
 export default {
   async fetch(request) {
     const {hostname, origin: site, pathname: path} = new URL(request.url);
-    const manifest = Object.hasOwn(manifests, hostname) ? manifests[hostname] : null;
-    if (!manifest) return new Response("Unknown guide", {status: 404});
+    const guide = Object.hasOwn(guides, hostname) ? guides[hostname] : null;
+    if (!guide) return new Response("Unknown guide", {status: 404});
     if (path === "/.well-known/mcp.json" && (request.method === "GET" || request.method === "HEAD")) {
-      return new Response(request.method === "HEAD" ? null : JSON.stringify(manifest), {
+      return new Response(request.method === "HEAD" ? null : JSON.stringify(guide.manifest), {
         headers: {"Content-Type": "application/json", "Cache-Control": "public, max-age=300"}
       });
     }
@@ -85,7 +88,7 @@ export default {
     const origin = request.headers.get("Origin");
     if (origin && origin !== site) return new Response("Origin is not permitted", {status: 403});
     if (request.method !== "POST") return new Response(null, {status: 405, headers: {Allow: "POST"}});
-    const server = createServer(site, manifest);
+    const server = createServer(site, guide);
     const transport = new WebStandardStreamableHTTPServerTransport({sessionIdGenerator: undefined, enableJsonResponse: true});
     await server.connect(transport);
     try {

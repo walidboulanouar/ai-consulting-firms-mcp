@@ -6,7 +6,13 @@ const endpoint = new URL(process.argv[2] || "https://theaiconsultingfirms.com/mc
 const client = new Client({name: "directory-smoke", version: "1.0.0"});
 await client.connect(new StreamableHTTPClientTransport(endpoint));
 try {
-  const tools = (await client.listTools()).tools.map(t => t.name).sort();
+  const listed = (await client.listTools()).tools;
+  const tools = listed.map(t => t.name).sort();
+  assert.ok(listed.every(t => t.title && t.description && t.annotations?.readOnlyHint));
+  const type = {"bestsecureaiforbusiness.com": "security tools", "topaiagentsforbusiness.com": "agent platforms"}[endpoint.hostname];
+  if (type) assert.ok(listed.every(t => t.title.includes(type)));
+  const crossOrigin = await fetch(endpoint, {method: "POST", headers: {Origin: "https://example.invalid"}});
+  assert.equal(crossOrigin.status, 403);
   assert.deepEqual(tools, ["compare_firms", "recommend_providers", "search_firms"]);
   const picks = JSON.parse((await client.callTool({name:"recommend_providers", arguments:{}})).content[0].text);
   assert.equal(picks.guide, endpoint.origin);

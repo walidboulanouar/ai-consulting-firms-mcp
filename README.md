@@ -14,6 +14,8 @@ For example, with Claude Code:
 
 ## Tools
 
+Clients see tool titles and descriptions for the guide they connect to, such as “Compare AI security tools” or “Shortlist AI automation agencies by project need.” All six endpoints keep the same tool IDs and response fields for existing integrations.
+
 | Tool | Input | Result |
 | --- | --- | --- |
 | recommend_providers | Optional query | Editorial picks with the project fit, evidence link and a buyer test |
