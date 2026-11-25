@@ -1,0 +1,10 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.walidboulanouar/ai-consulting-firms",
+  "title": "AI Consulting Firms",
+  "description": "Search and compare AI consulting firms using source-linked profiles and RFP questions.",
+  "version": "1.0.0",
+  "repository": {"url":"https://github.com/walidboulanouar/ai-consulting-firms-mcp","source":"github"},
+  "websiteUrl":"https://theaiconsultingfirms.com/#agent-access",
+  "remotes":[{"type":"streamable-http","url":"https://theaiconsultingfirms.com/mcp"}]
+}

@@ -1,0 +1,23 @@
+name: Publish to the Official MCP Registry
+on: workflow_dispatch
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch publisher and manifest at the selected commit
+        env:
+          COMMIT: ${{ github.sha }}
+        run: |
+          set -eu
+          curl --fail --silent --show-error --location --output publisher.tgz https://github.com/modelcontextprotocol/registry/releases/download/v1.8.4/mcp-publisher_linux_amd64.tar.gz
+          echo '5dc2fd415369c73551259f31cd33e2aacc9e0d1021e7f08fef1492d93b781628  publisher.tgz' | sha256sum --check
+          tar -xzf publisher.tgz mcp-publisher
+          curl --fail --silent --show-error --location --output server.json "https://raw.githubusercontent.com/walidboulanouar/ai-consulting-firms-mcp/$COMMIT/server.json"
+      - name: Authenticate with GitHub OIDC and publish
+        run: |
+          ./mcp-publisher validate server.json
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish server.json
