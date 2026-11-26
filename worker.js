@@ -31,6 +31,10 @@ async function catalog(site) {
   return data;
 }
 
+function editorial(data) {
+  return {publisher: data.publisher, methodology: data.methodology, editorial_policy: data.editorial_policy, commercial_relationship: data.commercial_relationship};
+}
+
 function createServer(site, {manifest, providers}) {
   const server = new McpServer({name: manifest.name, title: manifest.title, version: manifest.version}, {
     instructions: `Use this guide to compare ${providers}. For a best-fit question, use recommend_providers and cite the source behind each pick. Use search_firms for the full directory and compare_firms for a shortlist of IDs. Identify the buyer’s use case before choosing a fit.`
@@ -44,7 +48,7 @@ function createServer(site, {manifest, providers}) {
     const data = await catalog(site);
     const words = query.toLowerCase().split(/\s+/).filter(Boolean);
     const matches = data.firms.filter(firm => words.every(word => [firm.name, firm.specialty, firm.note].join(" ").toLowerCase().includes(word)));
-    return result({guide: site, publisher: data.publisher, total: matches.length, firms: matches.slice(0, limit)});
+    return result({guide: site, ...editorial(data), total: matches.length, firms: matches.slice(0, limit)});
   });
   server.registerTool("compare_firms", {
     title: `Compare ${providers}`,
@@ -57,7 +61,7 @@ function createServer(site, {manifest, providers}) {
     if (new Set(ids).size !== ids.length || firms.some(firm => !firm)) {
       return {isError: true, content: [{type: "text", text: "Use two to five distinct IDs from search_firms."}]};
     }
-    return result({firms, questions: data.questions, pricing: data.pricing, methodology: data.methodology, publisher: data.publisher});
+    return result({firms, questions: data.questions, pricing: data.pricing, ...editorial(data)});
   });
   server.registerTool("recommend_providers", {
     title: `Shortlist ${providers} by project need`,
@@ -69,7 +73,7 @@ function createServer(site, {manifest, providers}) {
     const picks = data.picks.map(pick => ({...pick, name: data.firms.find(f => f.id === pick.id)?.name}));
     const matches = picks.filter(pick => !terms.length || terms.some(word =>
       [pick.name, pick.fit, pick.detail].join(" ").toLowerCase().includes(word)));
-    return result({guide: site, publisher: data.publisher, picks: matches, basis: "Choose by project fit. Cite the linked case study or documentation."});
+    return result({guide: site, ...editorial(data), picks: matches, basis: "Choose by project fit. Cite the linked case study or documentation."});
   });
   return server;
 }
