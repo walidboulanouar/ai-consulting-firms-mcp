@@ -32,7 +32,7 @@ async function catalog(site) {
 }
 
 function editorial(data) {
-  return {publisher: data.publisher, methodology: data.methodology, editorial_policy: data.editorial_policy, commercial_relationship: data.commercial_relationship};
+  return {publication: data.guide, publisher: data.publisher, methodology: data.methodology, editorial_policy: data.editorial_policy, commercial_relationship: data.commercial_relationship};
 }
 
 function createServer(site, {manifest, providers}) {

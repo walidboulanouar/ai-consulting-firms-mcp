@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.walidboulanouar/business-ai-agents",
-  "title": "Business AI Agents",
+  "title": "AI Agents for Business",
   "description": "Compare business agent platforms by workflow, permission model and trial criteria.",
   "version": "1.1.1",
   "repository": {
