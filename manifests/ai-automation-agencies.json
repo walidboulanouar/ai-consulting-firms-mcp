@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.walidboulanouar/ai-automation-agencies",
-  "title": "AI Automation Agencies",
+  "title": "Top Automation Agencies",
   "description": "Shortlist automation agencies by workflow and source-linked case studies.",
   "version": "1.1.1",
   "repository": {

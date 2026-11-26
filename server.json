@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.walidboulanouar/ai-consulting-firms",
-  "title": "AI Consulting Firms",
+  "title": "The AI Consulting Firms Directory",
   "description": "Compare consulting firms by RFP scope and named client evidence.",
   "version": "1.1.1",
   "repository": {
