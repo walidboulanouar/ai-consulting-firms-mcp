@@ -4,11 +4,18 @@ Compare AI consulting firms when preparing an RFP. The server searches the publi
 
 ## Connect
 
-Add a remote server in an MCP client that supports Streamable HTTP. Use this address and leave authentication empty.
+Choose the guide for your purchase and paste its endpoint into an MCP client that supports Streamable HTTP. Leave authentication empty. Each endpoint reads the catalog on its own domain.
 
-    https://theaiconsultingfirms.com/mcp
+| Guide | Streamable HTTP endpoint | JSON data |
+| --- | --- | --- |
+| Secure AI for Business | `https://bestsecureaiforbusiness.com/mcp` | [Catalog](https://bestsecureaiforbusiness.com/firms.json) |
+| AI Consulting Companies | `https://theaiconsultingcompanies.com/mcp` | [Catalog](https://theaiconsultingcompanies.com/firms.json) |
+| AI Consulting Firms | `https://theaiconsultingfirms.com/mcp` | [Catalog](https://theaiconsultingfirms.com/firms.json) |
+| Business AI Agents | `https://topaiagentsforbusiness.com/mcp` | [Catalog](https://topaiagentsforbusiness.com/firms.json) |
+| AI Automation Agencies | `https://topaiautomationagencies.com/mcp` | [Catalog](https://topaiautomationagencies.com/firms.json) |
+| AI Consulting Services | `https://topaiconsultingservices.com/mcp` | [Catalog](https://topaiconsultingservices.com/firms.json) |
 
-For example, with Claude Code:
+For example, to connect Claude Code to the consulting-firms guide, run:
 
     claude mcp add --transport http ai-consulting-firms https://theaiconsultingfirms.com/mcp
 
@@ -22,7 +29,7 @@ Clients see tool titles and descriptions for the guide they connect to, such as 
 | search_firms | Optional query and limit | Matching firms, IDs, source links and individual guide links |
 | compare_firms | Two to five distinct IDs from search_firms | Side-by-side profiles, RFP questions, pricing guidance and editorial methodology |
 
-Try asking which firms mention engineering, then compare two of the returned IDs. An empty search lists the directory. The [public JSON feed](https://theaiconsultingfirms.com/firms.json) is the data source for the tools.
+Try asking which firms mention engineering, then compare two of the returned IDs. An empty search lists the directory.
 
 ## Operate
 
@@ -31,14 +38,3 @@ The Worker handles the exact apex /mcp route. The published catalog comes from t
 Use Node 22 or later and install pinned dependencies with `npm ci --ignore-scripts`. With Wrangler installed and logged in to the owning Cloudflare account, run `wrangler deploy`. Verify the published endpoint with `node scripts/smoke.mjs`. The implementation uses the [official TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk).
 
 The GitHub Actions publication workflow signs in to the official registry with GitHub OIDC. Update server.json and the server version before publishing a new release.
-
-## Guide endpoints
-
-- https://bestsecureaiforbusiness.com/mcp
-- https://theaiconsultingcompanies.com/mcp
-- https://theaiconsultingfirms.com/mcp
-- https://topaiagentsforbusiness.com/mcp
-- https://topaiautomationagencies.com/mcp
-- https://topaiconsultingservices.com/mcp
-
-Use the endpoint for the category the buyer is considering. Ask for the picks and their source evidence, then compare the relevant IDs. Pass an endpoint URL to scripts/smoke.mjs to test it.
